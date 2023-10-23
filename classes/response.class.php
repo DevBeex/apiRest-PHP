@@ -2,7 +2,7 @@
 
 class responses{
 
-    private $response = [
+    public $response = [
         'status' => "ok",
         'result' => array()
     ];
@@ -35,6 +35,14 @@ class responses{
         return $this->response;
     }
 
+    public function error_500($valor = 'Error interno del servidor'){
+        $this->response['status'] = "error";
+        $this->response['result'] = array(
+            "error_id" => "500",
+            "error_msg" => $valor
+        );
+        return $this->response;
+    }
 
 }
 
