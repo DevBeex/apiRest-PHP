@@ -9,15 +9,34 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
     if(isset($_GET["page"])){
         $page = $_GET["page"];
         $listPatients = $_patients->listPatients($page);
+        header("Content-Type: application/json");
         echo json_encode($listPatients);
+        http_response_code(200);
     }else if (isset($_GET['id'])){
         $pacientId = $_GET['id'];
         $patientData = $_patients->getPatient($pacientId);
+        header("Content-Type: application/json");
         echo json_encode($patientData);
+        http_response_code(200);
     }
 
 }else if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-    echo 'hola post';
+    //recibir datos por json
+    $postBody = file_get_contents("php://input");
+    //enviamos los datos al manejador
+    $dataArray = $_patients->post($postBody);
+    //devolver una respuesta
+    header('Content-Type: application/json');
+    if(isset($dataArray["result"]["error_id"])){
+        $responseCode = $dataArray["result"]["error_id"];
+        http_response_code($responseCode);
+    }else{
+        http_response_code(200);
+    }
+    echo json_encode($dataArray);
+
+
+
 }else if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
     echo 'hola put';
 }else if ($_SERVER['REQUEST_METHOD'] == 'DELETE'){
