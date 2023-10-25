@@ -35,12 +35,37 @@ if($_SERVER['REQUEST_METHOD'] == 'GET'){
     }
     echo json_encode($dataArray);
 
-
-
 }else if ($_SERVER['REQUEST_METHOD'] == 'PUT'){
-    echo 'hola put';
+    //recibir datos por json
+    $postBody = file_get_contents("php://input");
+    //Enviar datos
+    $dataArray = $_patients->put($postBody);
+    //devolver una respuesta
+    header('Content-Type: application/json');
+    if(isset($dataArray["result"]["error_id"])){
+        $responseCode = $dataArray["result"]["error_id"];
+        http_response_code($responseCode);
+    }else{
+        http_response_code(200);
+    }
+    echo json_encode($dataArray);
+
+
 }else if ($_SERVER['REQUEST_METHOD'] == 'DELETE'){
-    echo 'hola delete';
+    //recibir datos por json
+    $postBody = file_get_contents("php://input");
+    //Enviar datos
+    $dataArray = $_patients->delete($postBody);
+    // devolver una respuesta
+    header('Content-Type: application/json');
+    if(isset($dataArray["result"]["error_id"])){
+        $responseCode = $dataArray["result"]["error_id"];
+        http_response_code($responseCode);
+    }else{
+        http_response_code(200);
+    }
+    echo json_encode($dataArray);
+
 }else{
     header('Content-Type: application/json');
     $dataArray = $_responses->error_405();

@@ -70,8 +70,5 @@ class conection {
 
     }
     
-}
-
-
-
+}   
 ?>
